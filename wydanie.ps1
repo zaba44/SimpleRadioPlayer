@@ -56,6 +56,10 @@ foreach ($nazwa in $warianty.Keys) {
         $dat = Get-ChildItem (Join-Path $cel 'libvlc') -Recurse -Filter 'plugins.dat' | Select-Object -First 1
         if ($dat) { $dat.LastWriteTimeUtc = $dataPlikow } else { Write-Warning "Brak plugins.dat w $nazwa - program utworzy go przy pierwszym starcie" }
     }
+    # Eksplorator rozpakowuje ZIP z datami w czasie lokalnym (przesuniecie o strefe) -
+    # program odczytuje stad date docelowa i przywraca ja przed startem LibVLC
+    $katalogVlc = Get-ChildItem (Join-Path $cel 'libvlc') -Directory | Select-Object -First 1
+    [IO.File]::WriteAllText((Join-Path $katalogVlc.FullName 'daty-plikow.txt'), $dataPlikow.ToString('yyyy-MM-ddTHH:mm:ssZ'))
 
     $zip = Join-Path $wydanie "SimpleRadioPlayer-$Wersja-$nazwa.zip"
     $sevenZip = @((Get-Command 7z -ErrorAction SilentlyContinue).Source, "$env:ProgramFiles\7-Zip\7z.exe") |

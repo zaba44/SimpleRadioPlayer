@@ -78,6 +78,7 @@ sealed class Odtwarzacz : IDisposable
     {
         var (vlc, zapisanoCache) = await Task.Run(() =>
         {
+            PrzywrocDatyPlikowLibVlc();
             Core.Initialize(FolderLibVlc);
             // Bez plugins.dat LibVLC ładuje przy starcie wszystkie ~300 bibliotek wtyczek, a Defender
             // skanuje każdą — pierwszy start trwał przez to ~30 s. Z plikiem ładuje 2, resztę w razie potrzeby.
@@ -113,6 +114,27 @@ sealed class Odtwarzacz : IDisposable
             return wczytane > 30 && Konfiguracja.FolderZapisywalny(FolderWtyczek);
         }
         catch { return false; }
+    }
+
+    /// <summary>
+    /// plugins.dat pasuje tylko do dokładnych dat plików wtyczek. Eksplorator Windows rozpakowuje ZIP
+    /// z datami w czasie lokalnym, więc po budowaniu w innej strefie (GitHub Actions = UTC) daty
+    /// przesuwają się o kilka godzin i cache przestaje działać. wydanie.ps1 zapisuje datę docelową
+    /// w libvlc\daty-plikow.txt — przywrócenie jej trwa milisekundy, a pełne skanowanie wtyczek sekundy.
+    /// </summary>
+    static void PrzywrocDatyPlikowLibVlc()
+    {
+        try
+        {
+            string znacznik = Path.Combine(FolderLibVlc, "daty-plikow.txt");
+            if (!File.Exists(znacznik) || !File.Exists(PlikCache)) return;
+            if (!DateTime.TryParse(File.ReadAllText(znacznik).Trim(), System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.AdjustToUniversal | System.Globalization.DateTimeStyles.AssumeUniversal, out var data)) return;
+            if (File.GetLastWriteTimeUtc(PlikCache) == data) return;     // daty już się zgadzają
+            foreach (var plik in Directory.EnumerateFiles(FolderLibVlc, "*", SearchOption.AllDirectories))
+                File.SetLastWriteTimeUtc(plik, data);
+        }
+        catch { }   // folder tylko do odczytu — LibVLC przeskanuje wtyczki jak bez cache
     }
 
     /// <summary>Zapisuje plugins.dat. Wołane w tle po wykryciu nieaktualnego cache i przez build.bat (--przygotuj-wtyczki).</summary>
