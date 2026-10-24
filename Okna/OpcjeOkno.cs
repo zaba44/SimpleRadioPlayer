@@ -41,6 +41,8 @@ sealed class OpcjeOkno : Form
     public TrybStartu TrybStartu => _rbNic.Checked ? TrybStartu.Nic : _rbStartowa.Checked ? TrybStartu.Startowa : TrybStartu.Ostatnia;
     public Stacja? StacjaStartowa => (_cmbStartowa.SelectedItem as PozycjaStacji)?.Stacja;
     public bool ZamykajDoTraya => _chkTray.Checked;
+    readonly CheckBox _chkAktualizacje = new() { Text = "Raz na dobę sprawdzaj, czy jest nowa wersja (GitHub)", AutoSize = true };
+    public bool SprawdzajAktualizacje => _chkAktualizacje.Checked;
     public bool Przenosna => _rbPrzenosna.Checked;
 
     readonly RadioButton _rbLogoWszystkie = new() { Text = "Pokazuj wszystkie znalezione logotypy, brakujące zastąp kafelkiem", AutoSize = true };
@@ -125,8 +127,10 @@ sealed class OpcjeOkno : Form
             _chkAutostart,
             new Label { Text = "Po uruchomieniu programu:", AutoSize = true, Margin = new Padding(3, 8, 3, 0) },
             panelStartu,
-            _chkTray);
+            _chkTray,
+            _chkAktualizacje);
         _chkTray.Checked = konf.ZamykajDoTraya;
+        _chkAktualizacje.Checked = konf.SprawdzajAktualizacje;
 
         // Logotypy
         (konf.TrybLogo switch

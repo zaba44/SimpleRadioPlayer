@@ -1,0 +1,57 @@
+# Wydanie: po wypchnięciu tagu v1.2.3 buduje wszystkie wersje (wydanie.ps1)
+# i zakłada Release z plikami ZIP oraz sumami SHA-256.
+# Ręczne uruchomienie (Actions → Wydanie → Run workflow) tylko buduje — pliki są w artefakcie, bez Release.
+name: Wydanie
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      wersja:
+        description: 'Wersja do zbudowania, np. 1.2.0 (bez zakładania wydania)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  wydanie:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Budowanie wszystkich wersji
+        shell: powershell
+        run: .\wydanie.ps1 -Wersja '${{ github.ref_type == 'tag' && github.ref_name || inputs.wersja }}'
+
+      - name: Pliki jako artefakt przebiegu
+        uses: actions/upload-artifact@v4
+        with:
+          name: SimpleRadioPlayer
+          path: output/wydanie/*
+
+      - name: Wydanie na GitHubie
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Simple Radio Player ${{ github.ref_name }}
+          files: output/wydanie/*
+          generate_release_notes: true
+          body: |
+            ### Który plik pobrać
+            | Plik | Dla kogo |
+            |---|---|
+            | `…-win-x64.zip` | większość komputerów z Windows 10/11 — nie wymaga instalowania .NET |
+            | `…-win-x86.zip` | starsze, 32-bitowe Windows |
+            | `…-win-arm64.zip` | komputery z procesorem ARM (np. Snapdragon) |
+            | `…-lite-win-x64.zip` | najmniejszy; wymaga [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) |
+
+            Rozpakuj całe archiwum (np. „Wyodrębnij wszystkie” w Eksploratorze) i uruchom `SimpleRadioPlayer.exe`.
+            Sumy kontrolne plików są w `SHA256SUMS.txt`.
+
+            Program jest darmowy, także do użytku w firmie (GNU GPL v3). Jeśli Ci się przydaje: [cuplink.to/zaba44](https://cuplink.to/zaba44) ♥

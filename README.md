@@ -21,6 +21,8 @@ i gra ostatnią stację na wybranym urządzeniu audio.
 - **Tytuł granego utworu** (gdy stacja go nadaje) — dwuklik kopiuje go do schowka.
 - **Logotypy stacji** z możliwością wyboru: wszystkie, tylko dobrej jakości albo kafelki z literą.
 - **Wersja przenośna** — ustawienia obok programu albo, do wyboru, w profilu użytkownika.
+- **Informacja o nowej wersji** — raz na dobę program sprawdza wydania na GitHubie i pokazuje pasek
+  z linkiem do pobrania; niczego nie instaluje sam. Można to wyłączyć w Opcjach.
 
 Program startuje bez żadnej listy — nic nie pobiera sam. Listę pobiera się przyciskiem
 „Pobierz listę…”, importuje z pliku albo dodaje stacje ręcznie.
@@ -42,6 +44,10 @@ Rozpakuj całe archiwum — obok `SimpleRadioPlayer.exe` musi leżeć folder `li
 
 Wymagany [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0). Uruchom `build.bat`
 i wybierz wersję. Wyniki trafiają do folderu `output` — **każde budowanie czyści go w całości**.
+
+**Wydanie:** wypchnięcie tagu w postaci `v1.2.3` uruchamia GitHub Actions (`.github/workflows/wydanie.yml`),
+które skryptem `wydanie.ps1` budują wszystkie wersje, pakują je do ZIP z sumami SHA-256 i zakładają Release.
+Ten sam skrypt działa lokalnie: `powershell -ExecutionPolicy Bypass -File wydanie.ps1 -Wersja 1.2.3`.
 
 ## Licencja
 

@@ -221,6 +221,7 @@ partial class GlowneOkno
         _konf.ZamykajDoTraya = okno.ZamykajDoTraya;
         _konf.AktualizacjaListDni = okno.AktualizacjaListDni;
         _konf.ZglaszajOdtworzenia = okno.ZglaszajOdtworzenia;
+        _konf.SprawdzajAktualizacje = okno.SprawdzajAktualizacje;
         _konf.Zapisz();
 
         if (okno.Autostart != Autostart.Wlaczony)

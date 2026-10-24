@@ -49,6 +49,7 @@ partial class GlowneOkno
         // Kolejność dodawania: element Fill pierwszy, bo dokowanie idzie od ostatnio dodanego
         Controls.Add(_zakladki);
         Controls.Add(panel);
+        Controls.Add(BudujPasekAktualizacji());
         Controls.Add(menu);
         Controls.Add(status);
         MainMenuStrip = menu;
@@ -88,6 +89,7 @@ partial class GlowneOkno
         var pomoc = new ToolStripMenuItem("Po&moc");
         pomoc.DropDownItems.Add("&Licencje i źródła danych", null, (_, _) => OtworzPlikLicencji());
         pomoc.DropDownItems.Add("&Kod źródłowy (GitHub)", null, (_, _) => OtworzAdres(AdresRepozytorium));
+        pomoc.DropDownItems.Add("&Sprawdź aktualizacje", null, async (_, _) => await SprawdzAktualizacje(true));
         pomoc.DropDownItems.Add(new ToolStripSeparator());
         pomoc.DropDownItems.Add("&O programie", null, (_, _) => PokazOProgramie());
 

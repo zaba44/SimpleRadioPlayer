@@ -22,6 +22,12 @@ public sealed class Konfiguracja
 
     [JsonPropertyName("zamykaj_do_traya")] public bool ZamykajDoTraya { get; set; } = true;
 
+    /// <summary>Raz na dobę pyta GitHub o najnowsze wydanie i pokazuje pasek, gdy jest nowsze.</summary>
+    [JsonPropertyName("sprawdzaj_aktualizacje")] public bool SprawdzajAktualizacje { get; set; } = true;
+    [JsonPropertyName("aktualizacje_sprawdzone")] public DateTime AktualizacjeSprawdzone { get; set; }
+    /// <summary>Tag wydania, o którym użytkownik nie chce już przypomnień („Pomiń tę wersję”).</summary>
+    [JsonPropertyName("pominieta_wersja")] public string PominietaWersja { get; set; } = "";
+
     [JsonPropertyName("pobrane_listy")] public List<PobranaLista> PobraneListy { get; set; } = [];
     /// <summary>Co ile dni pytać o aktualizację pobranych list; 0 = nie pytać.</summary>
     [JsonPropertyName("aktualizacja_list_dni")] public int AktualizacjaListDni { get; set; } = 30;

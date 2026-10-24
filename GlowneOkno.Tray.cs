@@ -19,6 +19,8 @@ partial class GlowneOkno
             ContextMenuStrip = _menuTraya,
             Visible = true,
         };
+        _tray.BalloonTipClicked += (_, _) => { if (_adresZDymka != null) OtworzAdres(_adresZDymka); };
+        _tray.BalloonTipClosed += (_, _) => _adresZDymka = null;
         _tray.MouseClick += (_, e) =>
         {
             if (e.Button == MouseButtons.Left)
@@ -88,6 +90,7 @@ partial class GlowneOkno
         if (!_podpowiedzTrayaPokazana)
         {
             _podpowiedzTrayaPokazana = true;
+            _adresZDymka = null;
             _tray.ShowBalloonTip(3000, "Simple Radio Player", "Program działa dalej w obszarze powiadomień.", ToolTipIcon.Info);
         }
     }

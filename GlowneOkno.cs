@@ -105,6 +105,7 @@ public partial class GlowneOkno : Form
         };
         if (start != null) Graj(start);
         SprawdzTerminAktualizacjiList();
+        UruchomSprawdzanieAktualizacji();
     }
 
     void PrzywrocPolozenie()
