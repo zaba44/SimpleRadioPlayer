@@ -1,0 +1,5 @@
+* text=auto
+# cmd.exe przy końcach linii LF potrafi źle skakać do etykiet (goto/call)
+*.bat text eol=crlf
+*.png binary
+*.ico binary

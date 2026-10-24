@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <AssemblyName>SimpleRadioPlayer</AssemblyName>
+    <RootNamespace>SimpleRadioPlayer</RootNamespace>
+    <NeutralLanguage>pl-PL</NeutralLanguage>
+    <SatelliteResourceLanguages>pl-PL</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Product>Simple Radio Player</Product>
+    <Authors>Dominik Żabiński</Authors>
+    <Company>Dominik Żabiński</Company>
+    <Copyright>© 2026 Dominik Żabiński</Copyright>
+    <Description>Prosty odtwarzacz radia internetowego z trayem, ulubionymi i wyborem wyjścia dźwięku</Description>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="Exists('app.ico')">
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibVLCSharp" Version="3.10.2" />
+    <PackageReference Include="VideoLAN.LibVLC.Windows" Version="3.0.24" />
+  </ItemGroup>
+
+  <!-- LibVLC tylko dla architektury, na którą budujemy; bez RID (lite, debug) — x64 -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != 'win-x86'">
+    <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != 'win-arm64'">
+    <VlcWindowsArm64Enabled>false</VlcWindowsArm64Enabled>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x86' OR '$(RuntimeIdentifier)' == 'win-arm64'">
+    <VlcWindowsX64Enabled>false</VlcWindowsX64Enabled>
+  </PropertyGroup>
+
+  <!-- Moduły wideo, napisów, nagrywania i wizualizacji — radiu niepotrzebne, a to ok. 40 MB -->
+  <ItemGroup>
+    <VlcPominiete Include="plugins\video_output\%2A;plugins\video_filter\%2A;plugins\video_chroma\%2A;plugins\video_splitter\%2A;plugins\visualization\%2A;plugins\stream_out\%2A;plugins\access_output\%2A;plugins\mux\%2A;plugins\text_renderer\%2A;plugins\spu\%2A;plugins\services_discovery\%2A;plugins\d3d9\%2A;plugins\d3d11\%2A;plugins\codec\libx264%2A;plugins\codec\libx26410b%2A;plugins\codec\libaom%2A;plugins\codec\libdav1d%2A;plugins\codec\liblibass%2A;plugins\codec\libx265%2A;include\%2A;%2A.lib" />
+    <VlcWindowsX64ExcludeFiles Include="@(VlcPominiete)" />
+    <VlcWindowsX86ExcludeFiles Include="@(VlcPominiete)" />
+    <VlcWindowsArm64ExcludeFiles Include="@(VlcPominiete)" />
+  </ItemGroup>
+
+  <!-- LibVLC ładuje wtyczki z dysku, więc nie może trafić do środka pojedynczego exe.
+       LibVLCSharp.dll też zostaje osobnym plikiem: LGPL wymaga, żeby użytkownik mógł ją podmienić. -->
+  <Target Name="LibVlcObokExe" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').StartsWith('libvlc'))" ExcludeFromSingleFile="true" />
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" Condition="'%(Filename)%(Extension)' == 'LibVLCSharp.dll'" ExcludeFromSingleFile="true" />
+    </ItemGroup>
+  </Target>
+
+  <!-- Licencja programu i licencje komponentów jadą z każdą wersją -->
+  <ItemGroup>
+    <None Include="LICENSE;THIRD-PARTY-NOTICES.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+    <None Include="licencje\*.txt" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
+  </ItemGroup>
+</Project>

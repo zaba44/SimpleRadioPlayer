@@ -1,0 +1,17 @@
+# Pliki kompilacji i wyniki build.bat
+bin/
+obj/
+output/
+.vs/
+*.user
+
+# Osobiste listy stacji i notatki robocze — nie trafiają do repozytorium
+*.m3u
+*.m3u8
+*.pls
+ANALIZA-PLYNNOSCI.md
+
+# Dane programu, gdy uruchamiany z folderu projektu
+ustawienia.json
+logo/
+listy/

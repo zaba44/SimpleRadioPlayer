@@ -1,0 +1,56 @@
+Simple Radio Player — licencja, komponenty innych autorów i źródła danych
+=========================================================================
+
+Simple Radio Player
+Copyright (C) 2026 Dominik Żabiński
+https://github.com/zaba44/SimpleRadioPlayer
+
+Program jest wolnym oprogramowaniem: możesz go rozpowszechniać i zmieniać
+na warunkach licencji GNU General Public License w wersji 3 (plik LICENSE).
+Wolno go używać za darmo, także w firmie i w celach komercyjnych.
+Program jest udostępniany BEZ JAKIEJKOLWIEK GWARANCJI.
+
+Program jest darmowy. Jeśli Ci się przydaje, możesz dobrowolnie wesprzeć
+autora: https://cuplink.to/zaba44 — wsparcie nie odblokowuje żadnych funkcji.
+
+
+Komponenty innych autorów dołączone do programu
+-----------------------------------------------
+
+1. LibVLC 3.0.24 — VideoLAN
+   Silnik odtwarzania dźwięku (folder libvlc\).
+   Licencja: GNU Lesser General Public License 2.1 lub nowsza
+             (pełny tekst: licencje\LGPL-2.1.txt)
+   Strona projektu:      https://www.videolan.org/vlc/libvlc.html
+   Kod źródłowy wersji:  https://download.videolan.org/pub/videolan/vlc/3.0.24/
+   Pakiet dla .NET:      https://code.videolan.org/videolan/libvlc-nuget
+   Biblioteki z folderu libvlc\ można zastąpić własną zgodną wersją LibVLC 3.x.
+
+2. LibVLCSharp 3.10.2 — VideoLAN
+   Plik LibVLCSharp.dll obok programu.
+   Licencja: GNU Lesser General Public License 2.1 lub nowsza
+             (pełny tekst: licencje\LGPL-2.1.txt)
+   Kod źródłowy: https://code.videolan.org/videolan/LibVLCSharp
+   Plik można zastąpić własną zgodną wersją LibVLCSharp 3.x.
+
+3. .NET i Windows Forms — .NET Foundation and Contributors
+   W wersjach samodzielnych środowisko .NET jest wbudowane w plik exe.
+   Licencja: MIT (pełny tekst: licencje\MIT-dotnet.txt)
+   Kod źródłowy: https://github.com/dotnet/runtime
+                 https://github.com/dotnet/winforms
+
+
+Źródła danych — pobierane przez program, nie są do niego dołączone
+------------------------------------------------------------------
+
+4. Radio Browser — https://www.radio-browser.info
+   Otwarta, tworzona przez społeczność baza stacji radiowych. Z niej pochodzą
+   pobierane listy stacji, adresy strumieni, formaty i adresy logotypów.
+
+5. Logotypy stacji
+   Pobierane na komputerze użytkownika z bazy Radio Browser i ze stron WWW
+   stacji. Są znakami towarowymi właścicieli stacji; program ich nie
+   rozpowszechnia.
+
+6. Strumienie radiowe
+   Należą do nadawców. Program jedynie je odtwarza.
